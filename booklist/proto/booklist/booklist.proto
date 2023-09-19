@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package zusux.book.service.booklist;
+option go_package = "./;zusux_book_service_booklist";
+
+service Booklist {
+	rpc Call(BookRequest) returns (Books) {}
+	rpc Stream(StreamingRequest) returns (stream StreamingResponse) {}
+	rpc PingPong(stream Ping) returns (stream Pong) {}
+}
+
+message Message {
+	string say = 1;
+}
+
+message BookRequest {
+	int32 id = 1;
+	int32 cat_id = 2;
+	string name = 3;
+	string author = 4;
+	int32 is_hot = 5;
+	int32 is_new = 6;
+	int32 is_over = 7;
+	int32 page = 8;
+	int32 limit = 9;
+	string order = 10;
+}
+
+
+message Books {
+	repeated BookResponse BookResponses = 1;
+}
+
+message BookResponse {
+	int32 id = 1;
+	int32 cat_id = 2;
+	string cat_name = 3;
+	string name = 4;
+	string author = 5;
+	string intro = 6;
+	string url = 7;
+	string img = 8;
+	int32 created_at = 9;
+	int32 updated_at = 10;
+	string source_url = 11;
+	int32 status = 12;
+	int32 last_chapter_num = 13;
+	string last_chapter = 14;
+	string last_update = 15;
+	int32 click = 16;
+	int32 is_hot = 17;
+	int32 is_new = 18;
+	int32 is_over = 19;
+}
+
+message StreamingRequest {
+	int64 count = 1;
+}
+
+message StreamingResponse {
+	int64 count = 1;
+}
+
+message Ping {
+	int64 stroke = 1;
+}
+
+message Pong {
+	int64 stroke = 1;
+}

@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <title>小说阅读网</title>
+    <meta name="keywords" content="小说阅读网" />
+    <meta name="description" content="小说阅读网" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="https://zqjscss.cdn.bcebos.com/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+</head>
+<body >
+<div id="app">
+    <div class="header">
+        <h1 class="logo"><a href="/">小说阅读网</a></h1>
+        <form  class="search-form" id="form">
+            <input class="input-text input-key" id="keyWord" name="keyWord" type="text" maxlength="30"
+                   placeholder="可搜书名和作者，请您少字也别输错字。" />
+            <input type="button" class="btn-tosearch" value="搜索" title="搜索" onclick="check()"/>
+        </form>
+    </div>
+
+    <ul class="nav">
+        <li v-for="cat in catData">
+            <a :href="cat.path">${cat.name}</a>
+        </li>
+    </ul>
+    <div class="container">
+        <div class="row">
+            <div class="layout layout-col2">
+                <div class="item" v-for="book in hotBook">
+                    <div class="image">
+                        <a :href="'/book/'+book.id">
+                            <img style="min-height:120px;" onerror="src='/images/nopic.gif'" :src="book.img"
+                                 :alt="book.name" /></a>
+                    </div>
+                    <dl>
+                        <dt><span>${book.author} </span><a :href="'/book/'+book.id">${book.name} </a></dt>
+                        <dd><a :href="'/book/'+book.id" style="color: #555">${book.intro}</a></dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="layout layout-col1">
+                <h2 class="layout-tit">经典推荐</h2>
+                <ul class="txt-list txt-list-row3">
+                    <li v-for="book in classicBook">
+                        <span class="s1">[${book.cat_name}]</span>
+                        <span class="s2"><a :href="'/book/'+book.id">${book.name}</a></span>
+                        <span class="s5">${book.author}</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+        <div style="display:none" class="row">
+            <div class="layout">
+                <div class="tp-box">
+                    <h2>玄幻奇幻</h2>
+
+                    <div class="top">
+                        <div class="image">
+                            <a href="/book/267668/"><img src="https://ggzqimg.cdn.bcebos.com/BookFiles/BookImages/shishangzuikuanglaozu.jpg" onerror="src='/images/nopic.gif'" alt="史上最狂老祖" /></a>
+                        </div>
+                        <dl>
+                            <dt><a href="/book/267668/">史上最狂老祖</a></dt>
+                            <dd><a href="/book/267668/" style="color: #555">万年前，混世大魔王林天在人界成为无敌传说。万年后，林天修‘轮回弑天决’重回故里。曾经他创建的第一大宗已…</a></dd>
+                        </dl>
+                    </div>
+                    <ul>
+                        <li><a href="/book/11834/">绝世邪神</a>/纯情犀利哥</li>
+                    </ul>
+                </div>
+                <div class="tp-box">
+                    <h2>武侠仙侠</h2>
+
+                    <div class="top">
+                        <div class="image">
+                            <a href="/book/921/"><img src="https://ggzqimg.cdn.bcebos.com/BookFiles/BookImages/xiushenwaichuan.jpg" onerror="src='/images/nopic.gif'" alt="修神外传" /></a>
+                        </div>
+                        <dl>
+                            <dt><a href="/book/921/">修神外传</a></dt>
+                            <dd><a href="/book/921/" style="color: #555">神图合，惊雷鸣，禁地动，仙府出！　　   仙道茫茫路何方？神迹隐,隐为何？　　   天道无情人有情，万般欲念…</a></dd>
+                        </dl>
+                    </div>
+                    <ul>
+                        <li><a href="/book/256217/">绝世魔医，神帝别追</a>/西点灵枭</li>
+                    </ul>
+                </div>
+                <div class="tp-box">
+                    <h2>都市言情</h2>
+
+                    <div class="top">
+                        <div class="image">
+                            <a href="/book/127238/"><img src="https://ggzqimg.cdn.bcebos.com/BookFiles/BookImages/xiaohuazhitieshengaoshou.jpg" onerror="src='/images/nopic.gif'" alt="校花之贴身高手" /></a>
+                        </div>
+                        <dl>
+                            <dt><a href="/book/127238/">校花之贴身高手</a></dt>
+                            <dd><a href="/book/127238/" style="color: #555">他，从小跟着异人修练逆天诀，进入最神秘的特种部队，成为一名令人闻风丧胆的恐怖杀手。一次失败，他提前退役…</a></dd>
+                        </dl>
+                    </div>
+                    <ul>
+
+                        <li><a href="/book/269693/">极品全能学生</a>/夏天叶清雪</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div style="display:none" class="row">
+            <div class="layout">
+                <div class="tp-box">
+                    <h2>历史军事</h2>
+
+                    <div class="top">
+                        <div class="image">
+                            <a href="/book/28903/"><img src="https://ggzqimg.cdn.bcebos.com/BookFiles/BookImages/longhuntezhongbing.jpg" onerror="src='/images/nopic.gif'" alt="龙魂特种兵" /></a>
+                        </div>
+                        <dl>
+                            <dt><a href="/book/28903/">龙魂特种兵</a></dt>
+                            <dd><a href="/book/28903/" style="color: #555">【巨燃狂暴超爽新书】　　兵王归来，美女入怀。　　带着仇恨，带着使命，八年后踏入都市，搅动风云，龙战天下…</a></dd>
+                        </dl>
+                    </div>
+                    <ul>
+                        <li><a href="/book/5104/">花豹突击队</a>/竹香书屋</li>
+                    </ul>
+                </div>
+                <div class="tp-box">
+                    <h2>科幻灵异</h2>
+
+                    <div class="top">
+                        <div class="image">
+                            <a href="/book/13662/"><img src="https://ggzqimg.cdn.bcebos.com/BookFiles/BookImages/yuguizhechuanqi.jpg" onerror="src='/images/nopic.gif'" alt="御鬼者传奇" /></a>
+                        </div>
+                        <dl>
+                            <dt><a href="/book/13662/">御鬼者传奇</a></dt>
+                            <dd><a href="/book/13662/" style="color: #555">【老沙的话;94天更新百万字目标达成！下一个目标：200天更新200万字，请大家多多支持，老沙拜谢↖(^ω^)↗】…</a></dd>
+                        </dl>
+                    </div>
+                    <ul>
+                        <li><a href="/book/189799/">驱尸赶鬼纵横美漫</a>/沙之愚者</li>
+                    </ul>
+                </div>
+                <div class="tp-box">
+                    <h2>网游竞技</h2>
+
+                    <div class="top">
+                        <div class="image">
+                            <a href="/book/39345/"><img src="https://ggzqimg.cdn.bcebos.com/BookFiles/BookImages/kuaichuanzhihuashinixinanshenfangan.jpg" onerror="src='/images/nopic.gif'" alt="快穿之花式逆袭男神方案" /></a>
+                        </div>
+                        <dl>
+                            <dt><a href="/book/39345/">快穿之花式逆袭男神方案</a></dt>
+                            <dd><a href="/book/39345/" style="color: #555">这是一本男神详细攻略手册。　　　　温馨提示：收藏本书，更多人物等您解锁。</a></dd>
+                        </dl>
+                    </div>
+                    <ul>
+                        <li><a href="/book/137819/">纵横DNF</a>/江涛</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="layout layout2 layout-col1 fr">
+                <h2 class="layout-tit">最新入库小说</h2>
+                <ul class="txt-list txt-list-row3">
+
+                    <li v-for="book in newBook">
+                        <span class="s1">[${book.cat_name}]</span>
+                        <span class="s2"><a :href="'/book/'+book.id">${ book.name }</a></span>
+                        <span class="s5">${ book.author }</span>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="layout layout2 layout-col2 fl">
+                <h2 class="layout-tit">最近更新小说列表</h2>
+                <ul class="txt-list txt-list-row5">
+
+                    <li v-for="book in updateBook">
+                        <span class="s1">[${book.cat_name}]</span>
+                        <span class="s2">
+                                    <a :href="'/book/'+book.id">${ book.name }</a>
+                                </span>
+                        <span class="s4">${ book.author }</span><span class="s5">${formatDate(book.updated_at)}</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="footer" id="footer">
+        <div class="pc-footer">
+            <p>本站所有小说为转载作品，所有章节均由网友上传，转载至本站只是为了宣传本书让更多读者欣赏。</p>
+        </div>
+        <div class="m-footer">
+            <a href="/">首页</a>
+            <a href="#">顶部↑</a>
+        </div>
+    </div>
+
+    <div class="pc-footer">
+        <a href="#友情链接"></a>
+    </div>
+    <div class="m-footer" style="padding:0 10px 10px 10px;font-size:13px;margin:0;line-height:1;">
+        <a href="#友情链接"></a>
+    </div>
+</div>
+</body>
+<script>
+    var app = new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            catData:[
+                {id:1,name:"首页",path:"/"},
+                {id:3,name:"玄幻小说",path:"/?cat=3"},
+                {id:4,name:"修真小说",path:"/?cat=4"},
+                {id:5,name:"都市小说",path:"/?cat=5"},
+                {id:6,name:"穿越小说",path:"/?cat=6"},
+                {id:7,name:"网游小说",path:"/?cat=7"},
+                {id:8,name:"科幻小说",path:"/?cat=8"},
+            ],
+            cat_id:parseInt("{{.cat_id}}"),
+            message: 'Hello Vue!',
+            newBook:[],  //最新小说
+            updateBook:[],  //最近更新小说
+            classicBook:[],  //经典推荐
+            hotBook:[],  //热门推荐
+        },
+        created(){
+            this.loadData()
+        },
+        methods:{
+            loadData(){
+                this.getNewBook()
+                this.getUpdateBook()
+                this.getClassicBookBook()
+                this.getHotBookBook()
+            },
+            getNewBook(){
+                axios.post('/book',{
+                    cat_id:this.cat_id,
+                    is_new:1,
+                    page:0,
+                    limit:15,
+                },
+                ).then(response => {
+                    if(response.data.code == 200){
+                        this.newBook = response.data.data
+                    }
+                }).catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+            },
+            getUpdateBook(){
+                axios.post('/book',{
+                        cat_id:this.cat_id,
+                        order:"updated_at desc",
+                        page:0,
+                        limit:15,
+                    },
+                ).then(response => {
+                    if(response.data.code == 200){
+                        this.updateBook = response.data.data
+                    }
+                }).catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+            },
+            getClassicBookBook(){
+                axios.post('/book',{
+                        cat_id:this.cat_id,
+                        is_over:1,
+                        order:"updated_at",
+                        page:0,
+                        limit:9,
+                    },
+                ).then(response => {
+                    if(response.data.code == 200){
+                        this.classicBook = response.data.data
+                    }
+                }).catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+            },
+            getHotBookBook(){
+                axios.post('/book',{
+                        cat_id:this.cat_id,
+                        order:"img desc",
+                        is_hot:1,
+                        page:0,
+                        limit:4,
+                    },
+                ).then(response => {
+                    if(response.data.code == 200){
+                        this.hotBook = response.data.data
+                    }
+                }).catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+            },
+
+            formatDate(time){
+                var now=new Date(parseInt(time)*1000);
+                var year=now.getFullYear();
+                var month=now.getMonth()+1;
+                var date=now.getDate();
+                var hour=now.getHours();
+                var minute=now.getMinutes();
+                var second=now.getSeconds();
+                return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+            },
+
+            http_request(url,data){
+                this.$http.post(url,data).then(response => {
+                    // get body data
+                    this.someData = response.body;
+                }, response => {
+                    // error callback
+                });
+            }
+        }
+    })
+</script>
+</html>

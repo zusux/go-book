@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <meta name="applicable-device" content="pc,mobile">
+    <meta name="MobileOptimized" content="width">
+    <meta name="HandheldFriendly" content="true">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <meta name="renderer" content="webkit|ie-comp|ie-stand" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>小说阅读网</title>
+    <link rel="stylesheet" href="https://zqjscss.cdn.bcebos.com/css/style.css"/>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+
+<body id="reader-m-fix">
+    <div id="app">
+        <div class="header">
+            <h1 class="logo"><a href="/">小说阅读网</a></h1>
+            <form action="" class="search-form" id="form">
+                <input class="input-text input-key" id="keyWord" name="keyWord" type="text" maxlength="30"
+                       placeholder="可搜书名和作者，请您少字也别输错字。" />
+                <input type="button" class="btn-tosearch" value="搜索" title="搜索" />
+            </form>
+        </div>
+        <ul class="nav">
+            <li v-for="cat in catData">
+                <a :href="cat.path">${cat.name}</a>
+            </li>
+        </ul>
+
+        <div class="m-setting">
+            <div class="font-box">
+                <span>字:</span>
+                <span id="fontbig" onclick="nr_setbg('big')">大</span>
+                <span id="fontmiddle" onclick="nr_setbg('middle')">中</span>
+                <span id="fontsmall" onclick="nr_setbg('small')">小</span>
+            </div>
+            <a onclick="nr_setbg('light')" class="btn-setbg" id="bgmode-light">关灯</a>
+            <a onclick="nr_setbg('huyan')" class="btn-setbg" id="bgmode-huyan">护眼</a>
+        </div>
+        <div class="container" id="container">
+            <div class="row row-detail row-reader">
+                <div class="layout layout-col1">
+                    <div class="layout-tit xs-hidden">
+                        <a href="/">小说阅读网</a> >
+                        <a :href="'/book/'+chapterinfo.book_id" title="仙踪圣隐">${chapterinfo.title}</a> &gt; ${chapterinfo.title}
+                        <div class="reader-fun">
+                            <select class="select select-font">
+                                <option value="宋体,STSong">字体</option>
+                                <option value="方正启体简体,Apple LiGothic Medium">默认</option>
+                                <option value="黑体,STHeiti">黑体</option>
+                                <option value="楷体_GB2312,STKaiti">楷体</option>
+                                <option value="微软雅黑,STXihei">雅黑</option>
+                                <option value="方正启体简体,Apple LiGothic Medium">启体</option>
+                                <option value="宋体,STSong">宋体</option>
+                            </select>
+                            <select class="select select-color">
+                                <option value="#555555">颜色</option>
+                                <option value="#555555">默认</option>
+                                <option value="#9370DB">暗紫</option>
+                                <option value="#2E8B57">藻绿</option>
+                                <option value="#2F4F4F">深灰</option>
+                                <option value="#778899">青灰</option>
+                                <option value="#800000">栗色</option>
+                                <option value="#6A5ACD">青蓝</option>
+                                <option value="#BC8F8F">玫褐</option>
+                                <option value="#F4A460">黄褐</option>
+                                <option value="#F5F5DC">米色</option>
+                                <option value="#F5F5F5">雾白</option>
+                            </select>
+                            <select class="select select-size">
+                                <option value="#E9FAFF">大小</option>
+                                <option value="24px">默认</option>
+                                <option value="16px">16px</option>
+                                <option value="18px">18px</option>
+                                <option value="20px">20px</option>
+                                <option value="22px">22px</option>
+                                <option value="24px">24px</option>
+                                <option value="26px">26px</option>
+                                <option value="28px">28px</option>
+                                <option value="30px">30px</option>
+                                <option value="32px">32px</option>
+                            </select>
+                            <select class="select select-bg">
+                                <option value="#E9FAFF">背景</option>
+                                <option value="#E9FAFF">默认</option>
+                                <option value="#FFFFFF">白雪</option>
+                                <option value="#111111">漆黑</option>
+                                <option value="#FFFFED">明黄</option>
+                                <option value="#EEFAEE">淡绿</option>
+                                <option value="#CCE8CF">草绿</option>
+                                <option value="#FCEFFF">红粉</option>
+                                <option value="#EFEFEF">深灰</option>
+                                <option value="#F5F5DC">米色</option>
+                                <option value="#D2B48C">茶色</option>
+                                <option value="#C0C0C0">银色</option>
+                            </select>
+                            <span>
+                            <label for="readmode">夜间模式</label>
+                            <input type="checkbox" name="readmode" id="readermode" />
+                        </span>
+                        </div>
+                    </div>
+                    <div class="reader-main">
+                        <h1 class="title">${chapterinfo.title}</h1>
+                        <div class="section-opt">
+                            <a :href="'/book/'+chapterinfo.book_id">章节列表</a>
+                        </div>
+
+
+                        <div class="content" id="content">
+                            <div class="posterror"><a href="javascript:postError();" class="red">章节错误,点此举报(免注册)</a>,举报后维护人员会在两分钟内校正章节内容,请耐心等待,并刷新页面。</div>
+                            <div v-html="content"></div>
+                        </div>
+                        <div class="section-opt m-bottom-opt" style="margin: 0px; top: 0">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer" id="footer">
+            <div class="pc-footer">
+                <p>本站所有小说为转载作品，所有章节均由网友上传，转载至本站只是为了宣传本书让更多读者欣赏。</p>
+            </div>
+            <div class="m-footer">
+                <a href="/">首页</a>
+                <a href="#">顶部↑</a>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        delimiters: ['${', '}'],
+        data: {
+            catData:[
+                {id:1,name:"首页",path:"/"},
+                {id:3,name:"玄幻小说",path:"/?cat=3"},
+                {id:4,name:"修真小说",path:"/?cat=4"},
+                {id:5,name:"都市小说",path:"/?cat=5"},
+                {id:6,name:"穿越小说",path:"/?cat=6"},
+                {id:7,name:"网游小说",path:"/?cat=7"},
+                {id:8,name:"科幻小说",path:"/?cat=8"},
+            ],
+            book_id:"{{ .book_id }}",
+            chapter_id:"{{ .chapter_id }}",
+            chapterinfo:{},  //章节信息
+            content:{},  //内容
+        },
+        created(){
+            this.loadData()
+        },
+        methods:{
+            loadData(){
+                this.getChapter()
+                this.getContent()
+            },
+            getContent(){
+                axios.post('/content',{
+                        chapter_id:parseInt(this.chapter_id),
+                    },
+                ).then(response => {
+                    if(response.data.code == 200){
+                        this.content = response.data.data
+                    }
+                }).catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+            },
+            getChapter(){
+                axios.post('/chapter',{
+                        id:parseInt(this.chapter_id),
+                    },
+                ).then(response => {
+                    if(response.data.code == 200){
+                        let data = response.data.data
+                        if (data.length > 0){
+                            this.chapterinfo = data[0]
+                        }
+                    }
+                }).catch(function (error) { // 请求失败处理
+                    console.log(error);
+                });
+            },
+
+
+            formatDate(time){
+                var now=new Date(parseInt(time)*1000);
+                var year=now.getFullYear();
+                var month=now.getMonth()+1;
+                var date=now.getDate();
+                var hour=now.getHours();
+                var minute=now.getMinutes();
+                var second=now.getSeconds();
+                return year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+            },
+        }
+    })
+</script>
+<script language="javascript" type="text/javascript" src="https://mgzs.cdn.bcebos.com/txt.js"></script>
+<style>
+    .appguide-wrap { display: block; margin: 15px 10px; border-radius: 5px; box-shadow: 0 0 6px #ddd; overflow: hidden; background: #f09629; background-image: repeating-linear-gradient(60deg, rgba(255, 255, 255, .1), rgba(255, 255, 255, .1) 15px, transparent 0, transparent 30px); }
+    .appguide-wrap .appguide-txt { padding: 15px 10px; font-size: 16px; line-height: 26px; color: #fff; }
+    .appguide-wrap .appguide-btns { display: flex; line-height: 40px; text-align: center; background: #fff; }
+    .appguide-wrap .appguide-btns span { flex: 1; }
+    .appguide-wrap .appguide-btns span:first-child { background: #f5f5f5; color: #999; }
+</style>
+</html>

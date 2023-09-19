@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+package zusux.book.service.chapter;
+option go_package = "./;zusux_book_service_chapter";
+
+service Chapter {
+	rpc Call(ChapterRequest) returns (Chapters) {}
+	rpc Stream(StreamingRequest) returns (stream StreamingResponse) {}
+	rpc PingPong(stream Ping) returns (stream Pong) {}
+}
+
+message Message {
+	string say = 1;
+}
+
+
+message Chapters {
+    repeated ChapterResponse ChapterResponses = 1;
+}
+
+message ChapterRequest {
+	int32 book_id = 1;
+	int32 id = 2;
+}
+
+message ChapterResponse {
+	int32 id = 1;
+	int32 book_id = 2;
+	int32 parent_id = 3;
+	string url = 4;
+	string title = 5;
+	int32 created_at = 6;
+	int32 updated_at = 7;
+	string source_url = 8;
+	int32 sort = 9;
+}
+
+message StreamingRequest {
+	int64 count = 1;
+}
+
+message StreamingResponse {
+	int64 count = 1;
+}
+
+message Ping {
+	int64 stroke = 1;
+}
+
+message Pong {
+	int64 stroke = 1;
+}
